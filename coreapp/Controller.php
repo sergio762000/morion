@@ -25,7 +25,7 @@ class Controller
             if ($this->addressIsValid($_POST['ipaddr'])) {
                 $_SESSION[$_POST['ipaddr']] = array();
                 $result = $this->checkIp->run($_POST['ipaddr']);
-                if ($result) {
+                if (!empty($result)) {
                     $this->dbwork->saveItem($result);
                 }
             } else {
@@ -34,13 +34,19 @@ class Controller
         }
 
         $arrayListItem = $this->dbwork->listItem();
-        $this->fillTableData($arrayListItem);
+
+        if (!empty($arrayListItem)) {
+            $this->fillTableData($arrayListItem);
+        }
 
         return $this->render('index');
     }
 
     private function fillTableData($arrayListItem)
     {
+        //без шаблонизатора - использую глобальный массив
+        //если будет шаблонизатор - будем передавать в него содержимое ответа БД
+
         foreach ($arrayListItem as $item) {
             $_SESSION[$item['address_host']]['min'] = $item['min_time'];
             $_SESSION[$item['address_host']]['avg'] = $item['avg_time'];
@@ -53,13 +59,16 @@ class Controller
         ob_start();
         $fileTemplate = __DIR__ . '/../web/template/' . $page . ".php";
         include $fileTemplate;
-        return ob_end_flush();
+        session_destroy();
+        unset($_SESSION);
+        ob_end_flush();
     }
 
     private function addressIsValid($ipaddr)
     {
         //todo - проверка адреса хоста на валидность
         //при необходимости сюда добавляются другие типы проверок (IPv6, etc)
+        //Используем саму простую проверку (можно добавить проверку через регулярные выражения)
         return (ip2long($ipaddr)) ? true: false;
     }
 
