@@ -1,0 +1,17 @@
+create table if not exists result
+(
+	id serial not null
+		constraint result_pk
+			primary key,
+	address_host varchar,
+	min_time real default 0.00,
+	avg_time real default 0.00,
+	max_time real default 0.00,
+	update_time timestamp default now()
+);
+
+alter table result owner to postgres;
+
+create unique index result_address_host_uindex
+	on result (address_host);
+

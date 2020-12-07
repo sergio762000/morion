@@ -26,15 +26,26 @@ class Controller
                 $_SESSION[$_POST['ipaddr']] = array();
                 $result = $this->checkIp->run($_POST['ipaddr']);
                 if ($result) {
-                    $this->dbwork->save($result);
+                    $this->dbwork->saveItem($result);
                 }
             } else {
                 return $this->render('errorIP');
             }
         }
 
-        return $this->render('index');
+        $arrayListItem = $this->dbwork->listItem();
+        $this->fillTableData($arrayListItem);
 
+        return $this->render('index');
+    }
+
+    private function fillTableData($arrayListItem)
+    {
+        foreach ($arrayListItem as $item) {
+            $_SESSION[$item['address_host']]['min'] = $item['min_time'];
+            $_SESSION[$item['address_host']]['avg'] = $item['avg_time'];
+            $_SESSION[$item['address_host']]['max'] = $item['max_time'];
+        }
     }
 
     private function render($page)
