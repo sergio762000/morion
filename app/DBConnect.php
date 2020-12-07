@@ -15,13 +15,13 @@ class DBConnect
 
     public function connect()
     {
-        $dbconnect = $this->dbConfig->getDBParam();
-        $dsn = "pgsql:
-            host={$dbconnect['host']};
-            port={$dbconnect['port']};
-            dbname={$dbconnect['dbname']};
-            user={$dbconnect['username']};
-            password={$dbconnect['password']}";
+        $dbconf = $this->dbConfig->getDBParam();
+
+        $dsn = "pgsql:host=" . $dbconf['host']
+                . ";port=" . $dbconf['port']
+                . ";dbname=" . $dbconf['dbname']
+                . ";user=" . $dbconf['username']
+                . ";password=" . $dbconf['password'];
 
         return new \PDO($dsn);
     }

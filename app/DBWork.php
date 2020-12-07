@@ -50,7 +50,6 @@ class DBWork
                 'max_time' => $result['data']['max']
             ));
         }
-
         return $status;
     }
 
