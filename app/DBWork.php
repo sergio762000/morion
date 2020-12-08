@@ -38,7 +38,7 @@ class DBWork
                 'min_time' => $result['data']['min'],
                 'avg_time' => $result['data']['avg'],
                 'max_time' => $result['data']['max'],
-                'update_time' => time()
+                'update_time' => date(DATE_ATOM, time())
             ));
         } else {
             $sql = "INSERT INTO public.result (address_host, min_time, avg_time, max_time) VALUES (:address_host, :min_time, :avg_time, :max_time)";

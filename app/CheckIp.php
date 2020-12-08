@@ -26,9 +26,9 @@ class CheckIp
 
         $result = array();
         foreach ($answerRTTParam as $key => $param) {
-            $_SESSION[$ipaddr][$param] = $answerRTTValue[(int) $key];
+            $arrParam[$ipaddr][$param] = $answerRTTValue[(int) $key];
             $result['ipaddr'] = $ipaddr;
-            $result['data'] = $_SESSION[$ipaddr];
+            $result['data'] = $arrParam[$ipaddr];
         }
 
         return $result;

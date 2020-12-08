@@ -1,4 +1,10 @@
-<?php include_once __DIR__ . '/../layout/footer.html';?>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Ping Test</title>
+</head>
+<body>
 
 <form method="post" action="index.php">
     <label for="ipaddr">Введите ip-адрес хоста (IPv4)</label>
@@ -7,16 +13,16 @@
 
     <br>
 </form>
-<?php if (!empty($_POST['ipaddr'])): ?>
-    <?php if (!empty($_SESSION[$_POST['ipaddr']])):?>
-        Результаты проверки хоста: <b><?= $_POST['ipaddr']?></b>  <br>
-        <?php foreach ($_SESSION[$_POST['ipaddr']] as $key => $value): ?>
+<?php if (!empty($ipAddr)): ?>
+    <?php if (!empty($data[$ipAddr])):?>
+        Результаты проверки хоста: <b><?= $ipAddr?></b>  <br>
+        <?php foreach ($data[$ipAddr] as $key => $value): ?>
             <?= $key . ' = ' . $value . PHP_EOL?>
         <?php endforeach; ?>
     <?php endif;?>
 <?php endif;?>
 
-<?php if (!empty($_SESSION)):?>
+<?php if (!empty($data)):?>
     <br>
 <table>
     <thead>
@@ -29,7 +35,7 @@
     </thead>
     <tbody>
 
-    <?php foreach ($_SESSION as $ipaddr => $listParam): {
+    <?php foreach ($data as $ipaddr => $listParam): {
     }?>
         <tr>
             <td><?= $ipaddr?></td>
@@ -44,4 +50,5 @@
 
 <?php endif;?>
 
-<?php include_once __DIR__ . '/../layout/footer.html'; ?>
+</body>
+</html>
