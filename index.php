@@ -10,8 +10,8 @@ use coreapp\Controller;
 use coreapp\Router;
 
 $router = new Router();
-$router->get('/index.php', array(Controller::class, 'index'));
-$router->get('/', array(Controller::class, 'index'));
+$router->get('/index.php', array('coreapp\Controller', 'index'));
+$router->get('/', array('coreapp\Controller', 'index'));
 
 session_start(array(
     'name' => 'checkip'
