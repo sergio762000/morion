@@ -4,17 +4,17 @@
 namespace coreapp;
 
 
-use app\CheckIp;
+use app\CheckHost;
 use app\DBWork;
 
 class Controller
 {
-    private $checkIp;
+    private $checkHost;
     private $dbwork;
 
     public function __construct()
     {
-        $this->checkIp = new CheckIp();
+        $this->checkHost = new CheckHost();
         $this->dbwork = new DBWork();
     }
 
@@ -24,15 +24,19 @@ class Controller
         $data = '';
         if (!empty($_POST['ipaddr'])) {
             //todo - проверка адреса хоста на валидность
-            if ($this->addressIsValid($_POST['ipaddr'])) {
+            if ($this->addressIsValid($_POST['ipaddr'], $_POST['protocol'])) {
                 $ipAddr = $_POST['ipaddr'];
-                $result = $this->checkIp->run($ipAddr);
+                $protocol = $_POST['protocol'];
+                $result = $this->checkHost->run($ipAddr, $protocol);
 
                 if (!empty($result)) {
                     $this->dbwork->saveItem($result);
                 }
             } else {
-                return $this->render('errorIP');
+                return $this->render('errorIP', array(
+                    'ipaddr' => $_POST['ipaddr'],
+                    'protocol' => $_POST['protocol']
+                ));
             }
         }
 
@@ -67,12 +71,20 @@ class Controller
         }
     }
 
-    private function addressIsValid($ipaddr)
+    private function addressIsValid($ipaddr, $protocol)
     {
-        //todo - проверка адреса хоста на валидность
+        if ($protocol == 4) {
+            //todo - Проверка адреса IPv4
+            $resultCheckAddr = filter_var($ipaddr, FILTER_VALIDATE_IP, FILTER_FLAG_IPV4);
+        } else {
+            $resultCheckAddr = filter_var($ipaddr, FILTER_VALIDATE_IP, FILTER_FLAG_IPV6);
+        }
+
+        return $resultCheckAddr;
+
         //при необходимости сюда добавляются другие типы проверок (IPv6, etc)
         //Используем саму простую проверку (можно добавить проверку через регулярные выражения)
-        return (ip2long($ipaddr)) ? true: false;
+//        return (ip2long($ipaddr)) ? true: false;
     }
 
 }
